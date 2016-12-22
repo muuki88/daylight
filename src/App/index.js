@@ -26,28 +26,19 @@ class App extends Component {
 
   componentWillUnmount() {
     clearInterval(this.refreshSite);
-    clearInterval(this.setConditions);
-    clearInterval(this.setHourly);
   }
 
   refreshSite() {
     window.location.reload();
   }
 
-  getUnits() {
-    return this.props.location.query.units || 'imperial';
-  }
 
   render() {
     const appClassNames = [styles.App, styles.clear];
-    const units = this.getUnits();
     return (
       <div className={appClassNames.join(' ')}>
           <div className={styles.container}>
-            <DateTime
-              className={styles.DateTime}
-              units={units}
-            />
+            <DateTime className={styles.DateTime} />
           </div>
       </div>
     );

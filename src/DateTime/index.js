@@ -7,12 +7,10 @@ class DateTime extends Component {
 
   static propTypes = {
     className: React.PropTypes.string,
-    units: React.PropTypes.oneOf(['metric', 'imperial']),
   };
 
   static defaultProps = {
-    className: '',
-    units: 'imperial',
+    className: ''
   };
 
   constructor() {
@@ -40,10 +38,7 @@ class DateTime extends Component {
   }
 
   getDateFormat() {
-    switch (this.props.units) {
-      case 'imperial': return 'dddd, MMMM Do';
-      default: return 'dddd, Do MMMM';
-    }
+    return 'dddd, Do MMMM';
   }
 
   render() {
