@@ -58,14 +58,11 @@ class DateTime extends Component {
           {momentTime.format(this.getDateFormat())}
         </div>
         <div className={styles.time}>
-          {momentTime.format('h')}
+          {momentTime.format('HH')}
           <span className={seperatorClassNames.join(' ')}>
             :
           </span>
           {momentTime.format('mm')}
-          <span className={styles.period}>
-            {momentTime.format('A')}
-          </span>
         </div>
       </div>
     );
