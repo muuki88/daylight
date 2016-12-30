@@ -11,24 +11,15 @@ const IS_DEV = process.env.NODE_ENV !== 'production';
 
 class App extends Component {
 
-  constructor() {
-    super();
-    this.refreshSite = this.refreshSite.bind(this);
-  }
-
   componentDidMount() {
-    if(!this.getToken() && !IS_DEV) return;
-
     setInterval(this.refreshSite, 24 * ONE_HOUR);
-
-    this.setHourly();
   }
 
   componentWillUnmount() {
     clearInterval(this.refreshSite);
   }
 
-  refreshSite() {
+  refreshSite = () => {
     window.location.reload();
   }
 

@@ -1,0 +1,4 @@
+**/public/*
+**/target/*
+**/node_modules/*
+**/webpack.config*.js
