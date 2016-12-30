@@ -5,7 +5,7 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 export default new Config().merge({
   entry: {
-    bundle: ['babel-polyfill', './src/index.jsx']
+    bundle: ['babel-polyfill', './src/index.tsx']
   },
   output: {
     path: path.resolve(__dirname, '../build'),
@@ -15,6 +15,10 @@ export default new Config().merge({
   module: {
     // build configuration
     loaders: [
+      {
+        test: /\.tsx?$/,
+        loader: 'awesome-typescript-loader'
+      },
       {
         test: /.jsx?$/,
         loader: 'babel-loader',
@@ -33,7 +37,7 @@ export default new Config().merge({
   // Automatically transform files with these extensions
   resolve: {
     root: path.resolve('./src'),
-    extensions: ['', '.js', '.jsx', '.css', '.scss'],
+    extensions: ['', '.ts', '.tsx', '.js', '.jsx', '.css', '.scss'],
     modulesDirectories: ['node_modules']
   },
   plugins: [
