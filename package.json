@@ -9,9 +9,12 @@
     "deploy": "git checkout -B gh-pages && git add -f build && git commit -am \"chore: deploy\" && git filter-branch -f --prune-empty --subdirectory-filter build && git push -f origin gh-pages && git checkout master"
   },
   "dependencies": {
+    "@types/es6-promise": "^0.0.32",
     "@types/moment": "^2.13.0",
     "@types/react-dom": "^0.14.20",
     "@types/react-router": "^2.0.41",
+    "@types/webaudioapi": "^0.0.27",
+    "@types/webrtc": "^0.0.21",
     "autoprefixer": "^6.6.0",
     "awesome-typescript-loader": "^3.0.0-beta.17",
     "css-loader": "^0.26.1",

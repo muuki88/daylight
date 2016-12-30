@@ -17,13 +17,13 @@ https://danmconrad.github.io/daylight/?key=YOUR_API_KEY
 
 ### Development
 
-#### Setup 
+#### Setup
 To install and run the dev server:
 ```bash
-$ git clone https://github.com/danmconrad/daylight.git
+$ git clone https://github.com/muuki88/daylight.git
 $ cd daylight
-$ npm install
-$ npm start
+$ yarn
+$ yarn start
 ```
 
 #### Build & Deploy
@@ -39,13 +39,4 @@ $ npm run deploy
 The deploy process will checkout a new branch names `gh-pages` and include only the `dist` folder contents in that branch. It will then push up those changes to a remote version of `gh-pages`. Your site is now accessible at http://USERNAME.github.io/daylight.
 
 ### Creating a kiosk w/ a Raspberry Pi
-Check out the Daylight Kiosk [installation instructions](https://github.com/danmconrad/daylight-kiosk) to turn a TV+Pi into a monitor that automatically turns on and off.
-
-### Query Params
-| Param | Values | Default | Description |
-| ----- | ------ | ------- | ----------- |
-| key | string | null | Wunderground API Key |
-| showLocation | 'true', 'false' | false | Will show the autodetected or forced location |
-| token | string | null | Alias for 'key' parameter |
-| units | 'metric', 'imperial' | 'imperial' | Will show temperatures as F/C, and change the date format |
-| zipCode | string | null | A forced location instead of autodetection |
+Check out the Daylight Kiosk [installation instructions](https://github.com/muuki88/daylight-kiosk) to turn a TV+Pi into a monitor that automatically turns on and off.
