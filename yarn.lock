@@ -10,6 +10,10 @@
   version "2.0.42"
   resolved "https://registry.yarnpkg.com/@types/history/-/history-2.0.42.tgz#6ddb556f1a3b870e2e4fde131f1b13cbf3a99c4d"
 
+"@types/isomorphic-fetch@^0.0.31":
+  version "0.0.31"
+  resolved "https://registry.yarnpkg.com/@types/isomorphic-fetch/-/isomorphic-fetch-0.0.31.tgz#ec120166ce22f0b134e8770f40c97cd076068fae"
+
 "@types/moment@^2.13.0":
   version "2.13.0"
   resolved "https://registry.yarnpkg.com/@types/moment/-/moment-2.13.0.tgz#604ebd189bc3bc34a1548689404e61a2a4aac896"
@@ -40,6 +44,10 @@
 "@types/webrtc@^0.0.21":
   version "0.0.21"
   resolved "https://registry.yarnpkg.com/@types/webrtc/-/webrtc-0.0.21.tgz#bc3cfb7e22add284761e5d63efad664b0eba8b86"
+
+"@types/webspeechapi@^0.0.27":
+  version "0.0.27"
+  resolved "https://registry.yarnpkg.com/@types/webspeechapi/-/webspeechapi-0.0.27.tgz#d15d3b3d1de0e42f531ae94d5ad3dfa39bbf5e37"
 
 abbrev@1:
   version "1.0.9"
@@ -115,10 +123,6 @@ anymatch@^1.3.0:
   dependencies:
     arrify "^1.0.0"
     micromatch "^2.1.5"
-
-api-ai-javascript@^2.0.0-beta.7:
-  version "2.0.0-beta.7"
-  resolved "https://registry.yarnpkg.com/api-ai-javascript/-/api-ai-javascript-2.0.0-beta.7.tgz#a1d8b869c4b34929a1de302bc2c3bbb41044b716"
 
 aproba@^1.0.3:
   version "1.0.4"
@@ -2598,7 +2602,7 @@ isobject@^2.0.0:
   dependencies:
     isarray "1.0.0"
 
-isomorphic-fetch@^2.1.1:
+isomorphic-fetch@^2.1.1, isomorphic-fetch@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/isomorphic-fetch/-/isomorphic-fetch-2.2.1.tgz#611ae1acf14f5e81f729507472819fe9733558a9"
   dependencies:
