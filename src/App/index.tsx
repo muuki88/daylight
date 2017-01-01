@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as ReactRouter from 'react-router'
 import * as fetch from 'isomorphic-fetch';
 
 import DateTime from '../DateTime';
@@ -12,10 +13,17 @@ interface IAppState {
   isRecording: boolean
 }
 
-class App extends React.Component<void, IAppState> {
+interface IQueryParams {
+  API_AI_ACCESSTOKEN: string
+}
 
-  constructor() {
-    super();
+interface IAppProps extends ReactRouter.RouteComponentProps<{}, {}> {
+}
+
+class App extends React.Component<IAppProps, IAppState> {
+
+  constructor(props) {
+    super(props);
     const recognition = new webkitSpeechRecognition();
     recognition.lang = 'de-DE';
     this.state = {
@@ -59,6 +67,7 @@ class App extends React.Component<void, IAppState> {
 
   switchRecognition = () => {
     console.log('switch recognition');
+    this.getAction('Uhrzeit')
     if(this.state.isRecording) {
       this.state.recognition.stop();
     } else {
@@ -68,7 +77,9 @@ class App extends React.Component<void, IAppState> {
 
   getAction = (text: string) => {
     console.log('fetching');
-    const accessToken = 'xxxx';
+    console.log(this.props)
+    const queryParams =  this.props.location.query as IQueryParams;
+    const accessToken = queryParams.API_AI_ACCESSTOKEN;
     fetch('https://api.api.ai/v1/query?v=20150910', {
       method: 'POST',
       mode: 'cors',
