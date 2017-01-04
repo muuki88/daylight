@@ -29,12 +29,7 @@ export default new Config().extend('./webpack/webpack.config.base.js').merge({
     proxy: {
       // Forward API requests to the backend
       '/api': {
-        target: 'http://localhost:9000',
-        secure: false
-      },
-      // Forward iframes to the backend to render twirl templates
-      '/iframes': {
-        target: 'http://localhost:9000',
+        target: 'http://localhost:3050',
         secure: false
       }
     }

@@ -5,7 +5,7 @@
   "homepage": "http://muuki88.github.io/daylight",
   "scripts": {
     "start": "NODE_ENV=dev webpack-dev-server",
-    "build": "NODE_ENV=prod webpack -p",
+    "prod": "NODE_ENV=prod webpack -p",
     "deploy": "git checkout -B gh-pages && git add -f build && git commit -am \"chore: deploy\" && git filter-branch -f --prune-empty --subdirectory-filter build && git push -f origin gh-pages && git checkout master"
   },
   "dependencies": {
@@ -17,11 +17,16 @@
     "@types/webaudioapi": "^0.0.27",
     "@types/webrtc": "^0.0.21",
     "@types/webspeechapi": "^0.0.27",
+    "connect": "^3.5.0",
     "isomorphic-fetch": "^2.2.1",
     "moment": "^2.15.1",
+    "node-record-lpcm16": "^0.2.0",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
-    "react-router": "^2.8.1"
+    "react-router": "^2.8.1",
+    "serve-static": "^1.11.1",
+    "snowboy": "^1.1.0",
+    "socket.io": "^1.7.2"
   },
   "devDependencies": {
     "autoprefixer": "^6.6.0",
