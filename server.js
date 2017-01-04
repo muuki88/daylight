@@ -29,30 +29,31 @@ const models = new Models();
 models.add({
   file: 'resources/alexa.umdl',
   sensitivity: '0.5',
-  hotwords : 'alexa'
+  hotwords: 'alexa'
 });
 
 const detector = new Detector({
-  resource: "resources/common.res",
+  resource: 'resources/common.res',
   models: models,
   audioGain: 2.0
 });
 
-detector.on('silence', function () {
+detector.on('silence', () => {
   // console.log('silence');
 });
 
-detector.on('sound', function () {
+detector.on('sound', () => {
   // console.log('sound');
 });
 
-detector.on('error', function () {
+detector.on('error', () => {
   // console.log('error');
 });
 
-detector.on('hotword', function (index, hotword) {
-  console.log('hotword', index, hotword);
-  io.sockets.emit('message', hotword)
+detector.on('hotword', (index, hotword) => {
+  io.sockets.emit('wakeup', {
+    hotword: hotword
+  });
 });
 
 const mic = record.start({

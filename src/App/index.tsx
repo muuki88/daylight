@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactRouter from 'react-router'
 import * as fetch from 'isomorphic-fetch';
+import * as io from 'socket.io-client';
 
 import DateTime from '../DateTime';
 import './index.css';
@@ -10,7 +11,8 @@ const ONE_HOUR = 60 * ONE_MINUTE;
 
 interface IAppState {
   recognition: SpeechRecognition,
-  isRecording: boolean
+  isRecording: boolean,
+  socket?: SocketIOClient.Socket
 }
 
 interface IQueryParams {
@@ -41,12 +43,22 @@ class App extends React.Component<IAppProps, IAppState> {
       });
     };
 
+    const socket = io.connect('localhost:3050');
+    socket.on('connect', () => {
+      console.log(`connected to backend ${socket.id}`);
+    });
+
+    socket.on('wakeup', data => {
+      console.log('wakeup', data);
+      this.switchRecognition();
+    });
+
     this.state.recognition.onend = (event) => {
-      console.log('finished');
       console.log(event);
       this.setState({
         recognition: this.state.recognition,
-        isRecording: false
+        isRecording: false,
+        socket: socket
       });
     };
 
@@ -63,6 +75,12 @@ class App extends React.Component<IAppProps, IAppState> {
 
   componentWillUnmount() {
     // clearInterval(this.refreshSite);
+    // close socket
+    const socket = this.state.socket;
+    if (socket) {
+      socket.close();
+    }
+    // stop recognition
   }
 
   switchRecognition = () => {
@@ -76,8 +94,6 @@ class App extends React.Component<IAppProps, IAppState> {
   }
 
   getAction = (text: string) => {
-    console.log('fetching');
-    console.log(this.props)
     const queryParams =  this.props.location.query as IQueryParams;
     const accessToken = queryParams.API_AI_ACCESSTOKEN;
     fetch('https://api.api.ai/v1/query?v=20150910', {
@@ -90,7 +106,6 @@ class App extends React.Component<IAppProps, IAppState> {
       },
       body: JSON.stringify({ query: text, lang: 'en', sessionId: 'somerandomthing' })
     }).then(response => {
-      console.log('response');
       console.log(response.text());
     }).catch(error => {
       console.log('error');
@@ -106,9 +121,9 @@ class App extends React.Component<IAppProps, IAppState> {
   render() {
     return (
       <div className="App">
-          <button
-            style={{"background": "black", "fontSize": "16px"}}
-            onClick={this.switchRecognition}>Talk</button>
+          <div className="status">
+            {this.state.isRecording && <div className="isRecording"></div>}
+          </div>
           <div className="container">
               <DateTime className="" />
           </div>

@@ -1,4 +1,5 @@
 .App {
+  /* TODO use flex for a better full screen, centered container */
   padding: 1em 0.5em;
   height: calc(100% - 2em);
   width: calc(100% - 1em);
@@ -20,13 +21,57 @@
   position: relative;
   height: 100%;
   width: 100%;
+
 }
 
-.App.DateTime {
+.App .status {
   position: absolute;
-  width: 100%;
+  top: 0;
+  right: 0;
+  font-size: 20px;
+  padding: 40px;
 }
 
-.App.DateTime {
-  top: 0;
+
+
+/*@-webkit-keyframes breathing {
+    0% { @include box-shadow( 0px 1px -1px  $color); }
+    50% { @include box-shadow( 0px 1px 25px $color); }
+}
+@-moz-keyframes breathing {
+    0% { @include box-shadow( 0px 1px 1px  $color); }
+    50% { @include box-shadow( 0px 1px 25px $color); }
+}
+@keyframes breathing {
+    0% { @include box-shadow( 0px 1px 1px  $color); }
+    50% { @include box-shadow( 0px 1px 25px $color); }
+}*/
+
+@-webkit-keyframes breathing {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+@-moz-keyframes breathing {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes breathing {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.App .status .isRecording {
+  border-radius: 50%;
+  background: red;
+  height: 40px;
+  width: 40px;
+  /*@include animation(breathing, 3s, linear, infinite);*/
+  animation: breathing 2s linear infinite;
+  -ms-animation: breathing 2s linear infinite;
+  -webkit-animation: breathing 2s linear infinite;
+  -moz-animation: breathing 2s linear infinite;
+  -o-animation: breathing 2s linear infinite;
 }
