@@ -55,6 +55,7 @@ detector.on('error', () => {
 });
 
 detector.on('hotword', (index, hotword) => {
+  console.log(`hotword detected: ${hotword}`)
   io.sockets.emit('wakeup', {
     hotword: hotword
   });
