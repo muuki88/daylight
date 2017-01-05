@@ -57,9 +57,6 @@ class App extends React.Component<IAppProps, IAppState> {
   }
 
   onWakeWord = () => {
-    // REMOVE !!!
-    this.getAction('bla bla');
-    // REMOVE !!!
     if (!this.state.isRecording) {
       this.recognition.start();
     }
@@ -79,12 +76,10 @@ class App extends React.Component<IAppProps, IAppState> {
 
   onRecognitionResult = (event) => {
     let text = '';
-    console.log(event)
     for (let i = event.resultIndex; i < event.results.length; ++i) {
       text += event.results[i][0].transcript;
     }
-    console.log(text);
-    this.getAction(text)
+    this.getAction(text);
   }
 
   getAction = (text: string) => {
@@ -101,9 +96,9 @@ class App extends React.Component<IAppProps, IAppState> {
       // TODO use IRequestOptions
       body: JSON.stringify({ query: text, lang: 'de', sessionId: 'wally-mirror' })
     }).then(this.parseApiAiResponse)
-      .then(this.updateState).catch(error => {
-      console.log('error');
-      console.log(error);
+      .then(this.updateState)
+      .catch(error => {
+        console.log(error);
     });
   }
 
