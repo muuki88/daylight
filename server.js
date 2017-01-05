@@ -1,8 +1,13 @@
-const connect = require('connect')
-  , serveStatic = require('serve-static')
+const express = require('express')
+  , path = require('path')
   , http = require('http');
 
-const app    = connect().use('/', serveStatic('build'));
+const app    = express()
+  .use('/', express.static(__dirname + '/dist'))
+  .get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist/index.html'));
+  });
+
 const server = http.createServer(app);
 const io     = require('socket.io').listen(server);
 
@@ -11,7 +16,6 @@ io.sockets.on('connection', function (socket) {
 
   io.sockets.emit('message', 'new member joined');
 
-  socket.emit('news', { hello: 'world' });
   socket.on('message', function (data) {
     console.log('message', data);
     socket.emit('message', { hello: 'world'})

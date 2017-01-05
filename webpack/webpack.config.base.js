@@ -2,14 +2,15 @@ import {Config} from 'webpack-config';
 import path from 'path';
 import autoprefixer from 'autoprefixer';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 export default new Config().merge({
   entry: {
     bundle: ['babel-polyfill', './src/index.tsx']
   },
   output: {
-    path: path.resolve(__dirname, '../build'),
-    publicPath: '/assets/',
+    path: path.resolve(__dirname, '../dist'),
+    publicPath: '/',
     filename: '[name].js'
   },
   module: {
@@ -41,6 +42,11 @@ export default new Config().merge({
     modulesDirectories: ['node_modules']
   },
   plugins: [
-    new ExtractTextPlugin('[name].css')
+    new ExtractTextPlugin('[name].css'),
+    new HtmlWebpackPlugin({
+      template: 'src/index.tpl.html',
+      inject: 'body',
+      filename: 'index.html'
+    }),
   ]
 });
