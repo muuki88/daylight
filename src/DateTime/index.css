@@ -2,25 +2,27 @@
   text-align: center;
 }
 
-.DateTime.date {
-  font-size: 0.25em;
-  opacity: 0.9;
-  line-height: 1em;
-  letter-spacing: 0.06em;
-  margin: .15rem 0 0;
-}
+.DateTime {
+  .date {
+    font-size: 0.25em;
+    opacity: 0.9;
+    line-height: 1em;
+    letter-spacing: 0.06em;
+    margin: .15rem 0 0;
+  }
 
-.DateTime.time {
-  margin: 0.15em 0 0;
-  letter-spacing: 0.04em;
-}
+  .time {
+    margin: 0.15em 0 0;
+    letter-spacing: 0.04em;
+  }
 
-.DateTime.hide {
-  visibility: hidden;
-}
+  .hide {
+    visibility: hidden;
+  }
 
-.DateTime.seperator {
-  vertical-align: middle;
-  margin: -0.15em 0 0 -0.05em;
-  display: inline-block;
+  .seperator {
+    vertical-align: middle;
+    margin: -0.15em 0 0 -0.05em;
+    display: inline-block;
+  }
 }
