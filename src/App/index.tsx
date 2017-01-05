@@ -4,6 +4,7 @@ import * as fetch from 'isomorphic-fetch';
 import * as io from 'socket.io-client';
 
 import DateTime from '../DateTime';
+import ForeCats from '../ForeCats';
 import UnkownInput from '../UnkownInput';
 import Recording from './Recording';
 
@@ -20,7 +21,8 @@ interface IAppState {
 }
 
 interface IQueryParams {
-  API_AI_ACCESSTOKEN: string
+  API_AI_ACCESSTOKEN: string,
+  IMGUR_CLIENTID: string
 }
 
 interface IAppProps extends ReactRouter.RouteComponentProps<{}, {}> {
@@ -45,6 +47,7 @@ class App extends React.Component<IAppProps, IAppState> {
     });
 
     this.socket.on('wakeup', this.onWakeWord);
+    this.socket.on('text', this.getAction);
 
     this.state = {
       isRecording: false
@@ -83,8 +86,7 @@ class App extends React.Component<IAppProps, IAppState> {
   }
 
   getAction = (text: string) => {
-    const queryParams =  this.props.location.query as IQueryParams;
-    const accessToken = queryParams.API_AI_ACCESSTOKEN;
+    const accessToken = this.queryParams().API_AI_ACCESSTOKEN;
     fetch('https://api.api.ai/v1/query?v=20150910', {
       method: 'POST',
       mode: 'cors',
@@ -117,6 +119,10 @@ class App extends React.Component<IAppProps, IAppState> {
     });
   }
 
+  queryParams(): IQueryParams {
+    return this.props.location.query as IQueryParams;
+  }
+
   render() {
     return (
       <div className={styles.App}>
@@ -133,10 +139,11 @@ class App extends React.Component<IAppProps, IAppState> {
   }
 
   renderAction = (action: IAction) => {
-    console.log(action);
+    const imgurClientId = this.queryParams().IMGUR_CLIENTID;
     switch (action.action) {
-      case "clock.show": return <DateTime />;
-      case "input.unknown":
+      case 'clock.show': return <DateTime />;
+      case 'cats.show': return <ForeCats clientId={imgurClientId} />;
+      case 'input.unknown':
       default: return <UnkownInput speech={action.fulfillment.speech} />
     }
   }

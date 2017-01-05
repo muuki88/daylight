@@ -24,7 +24,8 @@ io.sockets.on('connection', (socket) => {
       console.log('wakeup client');
       io.sockets.emit('wakeup', {hotword: null})
     } else {
-      socket.emit('message', `received: ${data}`)
+      // socket.emit('message', `received: ${data}`)
+      io.sockets.emit('text', data);
     }
   });
 });
