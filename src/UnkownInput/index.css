@@ -1,0 +1,7 @@
+.UnkownInput {
+  & h1 {
+    font-size: 0.4em;
+    text-align: center;
+    margin: 0;
+  }
+}

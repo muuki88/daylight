@@ -4,7 +4,10 @@ import * as fetch from 'isomorphic-fetch';
 import * as io from 'socket.io-client';
 
 import DateTime from '../DateTime';
+import UnkownInput from '../UnkownInput';
 import Recording from './Recording';
+
+import {IServerResponse, IAction, IContext} from '../models/api-ai';
 
 const styles = require<any>('./index.css');
 
@@ -12,9 +15,8 @@ const ONE_MINUTE = 1000 * 60;
 const ONE_HOUR = 60 * ONE_MINUTE;
 
 interface IAppState {
-  recognition: SpeechRecognition,
   isRecording: boolean,
-  socket?: SocketIOClient.Socket
+  action?: IAction
 }
 
 interface IQueryParams {
@@ -26,73 +28,63 @@ interface IAppProps extends ReactRouter.RouteComponentProps<{}, {}> {
 
 class App extends React.Component<IAppProps, IAppState> {
 
+  readonly recognition: SpeechRecognition;
+  readonly socket: SocketIOClient.Socket;
+
   constructor(props) {
     super(props);
-    const recognition = new webkitSpeechRecognition();
-    recognition.lang = 'de-DE';
+    this.socket = io.connect('localhost:3050');
+    this.recognition = new webkitSpeechRecognition();
+    this.recognition.lang = 'de-DE';
+    this.recognition.onstart = this.onRecognitionStart;
+    this.recognition.onend = this.onRecognitionEnd;
+    this.recognition.onresult = this.onRecognitionResult;
+
+    this.socket.on('connect', () => {
+      console.log(`connected to backend ${this.socket.id}`);
+    });
+
+    this.socket.on('wakeup', this.onWakeWord);
+
     this.state = {
-      recognition: recognition,
       isRecording: false
     };
   }
 
-  componentDidMount() {
-    // setInterval(this.refreshSite, 24 * ONE_HOUR);
-    this.state.recognition.onstart = () => {
-      this.setState({
-        recognition: this.state.recognition,
-        isRecording: true
-      });
-    };
-
-    const socket = io.connect('localhost:3050');
-    socket.on('connect', () => {
-      console.log(`connected to backend ${socket.id}`);
-    });
-
-    socket.on('wakeup', data => {
-      console.log('wakeup', data);
-      this.switchRecognition();
-    });
-
-    this.state.recognition.onend = (event) => {
-      console.log(event);
-      this.setState({
-        recognition: this.state.recognition,
-        isRecording: false,
-        socket: socket
-      });
-    };
-
-    this.state.recognition.onresult = (event) => {
-      let text = '';
-      console.log(event)
-      for (let i = event.resultIndex; i < event.results.length; ++i) {
-        text += event.results[i][0].transcript;
-      }
-      console.log(text);
-      this.getAction(text)
-    }
-  }
-
   componentWillUnmount() {
-    // clearInterval(this.refreshSite);
-    // close socket
-    const socket = this.state.socket;
-    if (socket) {
-      socket.close();
-    }
-    // stop recognition
+    this.socket.close();
+    this.recognition.stop();
   }
 
-  switchRecognition = () => {
-    console.log('switch recognition');
-    this.getAction('Uhrzeit')
-    if(this.state.isRecording) {
-      this.state.recognition.stop();
-    } else {
-      this.state.recognition.start();
+  onWakeWord = () => {
+    // REMOVE !!!
+    this.getAction('bla bla');
+    // REMOVE !!!
+    if (!this.state.isRecording) {
+      this.recognition.start();
     }
+  }
+
+  onRecognitionStart = () => {
+    this.setState({
+      isRecording: true
+    });
+  }
+
+  onRecognitionEnd = () => {
+    this.setState({
+      isRecording: false
+    });
+  }
+
+  onRecognitionResult = (event) => {
+    let text = '';
+    console.log(event)
+    for (let i = event.resultIndex; i < event.results.length; ++i) {
+      text += event.results[i][0].transcript;
+    }
+    console.log(text);
+    this.getAction(text)
   }
 
   getAction = (text: string) => {
@@ -106,10 +98,10 @@ class App extends React.Component<IAppProps, IAppState> {
         'Content-Type': 'application/json; charset=utf-8',
         'Authorization': `Bearer ${accessToken}`
       },
-      body: JSON.stringify({ query: text, lang: 'en', sessionId: 'somerandomthing' })
-    }).then(response => {
-      console.log(response.text());
-    }).catch(error => {
+      // TODO use IRequestOptions
+      body: JSON.stringify({ query: text, lang: 'de', sessionId: 'wally-mirror' })
+    }).then(this.parseApiAiResponse)
+      .then(this.updateState).catch(error => {
       console.log('error');
       console.log(error);
     });
@@ -119,20 +111,39 @@ class App extends React.Component<IAppProps, IAppState> {
     window.location.reload();
   }
 
+  parseApiAiResponse = (response: IResponse) => {
+    return response.json().then(json => json as IServerResponse);
+  }
+
+  updateState = (apiAiResponse: IServerResponse) => {
+    this.setState({
+      isRecording: this.state.isRecording,
+      action: apiAiResponse.result
+    });
+  }
 
   render() {
-    console.log(styles);
     return (
       <div className={styles.App}>
           <div className={styles.status}>
             {this.state.isRecording && <div className={styles.isRecording}></div>}
           </div>
           <div className={styles.container}>
-            {this.state.isRecording && <Recording />}
-            {!this.state.isRecording && <DateTime className="" />}
+            {this.state.isRecording ? <Recording /> : (
+              this.state.action ? this.renderAction(this.state.action) : <DateTime />
+            )}
           </div>
       </div>
     );
+  }
+
+  renderAction = (action: IAction) => {
+    console.log(action);
+    switch (action.action) {
+      case "clock.show": return <DateTime />;
+      case "input.unknown":
+      default: return <UnkownInput speech={action.fulfillment.speech} />
+    }
   }
 }
 

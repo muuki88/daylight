@@ -1,10 +1,9 @@
 import * as React from 'react';
 import * as moment from 'moment';
 
-
 const styles = require<any>('./index.css');
 
-interface IDateTimeProps { className: string; }
+interface IDateTimeProps { }
 
 interface IDateTimeState {
     momentTime: moment.Moment,
@@ -16,7 +15,6 @@ class DateTime extends React.Component<IDateTimeProps, IDateTimeState> {
 
     constructor(props: IDateTimeProps) {
         super(props);
-        // this.setTime = this.setTime.bind(this);
         this.state = {
             momentTime: moment(),
             isHalfTick: false
@@ -53,18 +51,16 @@ class DateTime extends React.Component<IDateTimeProps, IDateTimeState> {
         const seperatorClassNames = [styles.DateTime, styles.separator];
         if (isHalfTick) seperatorClassNames.push('hide');
         return (
-            <div className={styles.DateTime}>
-                <div className={[styles.DateTime, styles.date].join(' ')}>
-                    {momentTime.format(this.getDateFormat())}
-                </div>
-                <div className={[styles.DateTime, styles.time].join(' ')}>
-                    {momentTime.format('HH')}
-                    <span className={seperatorClassNames.join(' ')}>
-                        :
-          </span>
-                    {momentTime.format('mm')}
-                </div>
+          <div className={styles.DateTime}>
+            <div className={[styles.DateTime, styles.date].join(' ')}>
+              {momentTime.format(this.getDateFormat())}
             </div>
+            <div className={[styles.DateTime, styles.time].join(' ')}>
+              {momentTime.format('HH')}
+              <span className={seperatorClassNames.join(' ')}>:</span>
+              {momentTime.format('mm')}
+            </div>
+          </div>
         );
     }
 }
