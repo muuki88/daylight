@@ -40,20 +40,6 @@
     -o-animation: $name $seconds $style $totaltime;
 }
 
-
-/*@-webkit-keyframes breathing {
-    0% { @include box-shadow( 0px 1px -1px  $color); }
-    50% { @include box-shadow( 0px 1px 25px $color); }
-}
-@-moz-keyframes breathing {
-    0% { @include box-shadow( 0px 1px 1px  $color); }
-    50% { @include box-shadow( 0px 1px 25px $color); }
-}
-@keyframes breathing {
-    0% { @include box-shadow( 0px 1px 1px  $color); }
-    50% { @include box-shadow( 0px 1px 25px $color); }
-}*/
-
 @-webkit-keyframes breathing {
     0% { opacity: 0; }
     50% { opacity: 1; }
@@ -75,11 +61,5 @@
   background: red;
   height: 40px;
   width: 40px;
-  /*@include animation(breathing, 3s, linear, infinite);*/
-  /*animation: breathing 2s linear infinite;
-  -ms-animation: breathing 2s linear infinite;
-  -webkit-animation: breathing 2s linear infinite;
-  -moz-animation: breathing 2s linear infinite;
-  -o-animation: breathing 2s linear infinite;*/
   @include animation(breathing, 3s, linear, infinite);
 }
