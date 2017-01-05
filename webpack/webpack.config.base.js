@@ -28,7 +28,15 @@ export default new Config().merge({
           presets: ['es2015', 'react', 'stage-1']
         }
       },
-      {test: /\.[s]?css$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader?importLoaders=1', 'postcss-loader')},
+      {
+        test: /\.[s]?css$/,
+        loader: ExtractTextPlugin.extract(
+          'style-loader', [
+            'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
+            'postcss-loader'
+          ]
+        )
+      },
       {
         test: /\.(eot|svg|ttf|woff|woff2)$/,
         loader: 'file?name=public/fonts/[name].[ext]'
@@ -38,7 +46,7 @@ export default new Config().merge({
   // Automatically transform files with these extensions
   resolve: {
     root: path.resolve('./src'),
-    extensions: ['', '.ts', '.tsx', '.js', '.jsx', '.css', '.scss'],
+    extensions: ['', '.ts', '.tsx', '.js', '.css'],
     modulesDirectories: ['node_modules']
   },
   plugins: [

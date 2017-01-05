@@ -1,0 +1,6 @@
+.Recording {
+  & h1 {
+    font-size: 1em;
+    text-align: center;
+  }
+}

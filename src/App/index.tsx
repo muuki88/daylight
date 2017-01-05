@@ -4,7 +4,9 @@ import * as fetch from 'isomorphic-fetch';
 import * as io from 'socket.io-client';
 
 import DateTime from '../DateTime';
-import './index.css';
+import Recording from './Recording';
+
+const styles = require<any>('./index.css');
 
 const ONE_MINUTE = 1000 * 60;
 const ONE_HOUR = 60 * ONE_MINUTE;
@@ -119,13 +121,15 @@ class App extends React.Component<IAppProps, IAppState> {
 
 
   render() {
+    console.log(styles);
     return (
-      <div className="App">
-          <div className="status">
-            {this.state.isRecording && <div className="isRecording"></div>}
+      <div className={styles.App}>
+          <div className={styles.status}>
+            {this.state.isRecording && <div className={styles.isRecording}></div>}
           </div>
-          <div className="container">
-              <DateTime className="" />
+          <div className={styles.container}>
+            {this.state.isRecording && <Recording />}
+            {!this.state.isRecording && <DateTime className="" />}
           </div>
       </div>
     );

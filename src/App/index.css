@@ -32,12 +32,8 @@
   padding: 40px;
 }
 
-@mixin animation($name, $seconds, $style, $totaltime) {
-    animation: $name $seconds $style $totaltime;
-    -ms-animation: $name $seconds $style $totaltime;
-    -webkit-animation: $name $seconds $style $totaltime;
-    -moz-animation: $name $seconds $style $totaltime;
-    -o-animation: $name $seconds $style $totaltime;
+@define-mixin animation $name: all, $time: 150ms, $easing: ease-out, $totaltime: infinite {
+  animation: $(name) $(time) $(easing) $(totaltime);
 }
 
 @-webkit-keyframes breathing {
@@ -61,5 +57,5 @@
   background: red;
   height: 40px;
   width: 40px;
-  @include animation(breathing, 3s, linear, infinite);
+  @mixin animation breathing, 3s, linear, infinite;
 }

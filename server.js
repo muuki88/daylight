@@ -11,14 +11,21 @@ const app    = express()
 const server = http.createServer(app);
 const io     = require('socket.io').listen(server);
 
-io.sockets.on('connection', function (socket) {
+io.sockets.on('connection', (socket) => {
   console.log('incoming connection')
 
-  io.sockets.emit('message', 'new member joined');
+  socket.on('wakeup', () => {
+    io.sockets.emit('wakeup', {hotword: null})
+  });
 
-  socket.on('message', function (data) {
-    console.log('message', data);
-    socket.emit('message', { hello: 'world'})
+  socket.on('message', (data) => {
+
+    if (data === 'wakeup') {
+      console.log('wakeup client');
+      io.sockets.emit('wakeup', {hotword: null})
+    } else {
+      socket.emit('message', `received: ${data}`)
+    }
   });
 });
 
