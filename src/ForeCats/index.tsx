@@ -3,7 +3,7 @@ import * as fetch from 'isomorphic-fetch';
 
 const styles = require<any>('./index.css');
 
-interface IForeCats {
+interface IForeCatsProps {
   clientId: string
 }
 
@@ -21,7 +21,7 @@ interface IImgurGalleryResponse {
   data: Array<IImgurImage>
 }
 
-class ForeCats extends React.Component<IForeCats, {imageUrl?: string}> {
+class ForeCats extends React.Component<IForeCatsProps, {imageUrl?: string}> {
 
   constructor(props) {
     super(props);
@@ -31,7 +31,7 @@ class ForeCats extends React.Component<IForeCats, {imageUrl?: string}> {
   componentDidMount() {
 
     const clientId = this.props.clientId;
-    const params = encodeURI('title cats AND ext:  gif AND animated: true&page=0');
+    const params = encodeURI('(cats OR cat OR kitten OR kitties) AND animated: true&page=0');
 
     fetch(`https://api.imgur.com/3/gallery/search?q=${params}`, {
       method: 'GET',
