@@ -44,6 +44,12 @@ models.add({
   hotwords: 'alexa'
 });
 
+models.add({
+  file: 'resources/Hey_Wally.pmdl',
+  sensitivity: '0.5',
+  hotwords: 'hey wally'
+});
+
 const detector = new Detector({
   resource: 'resources/common.res',
   models: models,
