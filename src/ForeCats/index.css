@@ -1,7 +1,7 @@
 .ForeCats {
+  text-align: center;
+
   img {
     margin-top: -0.4em;
-    width: 100%;
-    height: auto;
   }
 }
