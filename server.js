@@ -2,10 +2,12 @@ const express = require('express')
   , path = require('path')
   , http = require('http');
 
+
+console.log(__dirname)
 const app    = express()
-  .use('/', express.static(__dirname + '/dist'))
+  .use('/', express.static(path.join(__dirname, 'public')))
   .get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist/index.html'));
+    res.sendFile(path.join(__dirname, 'public/index.html'));
   });
 
 const server = http.createServer(app);

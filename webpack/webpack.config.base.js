@@ -9,7 +9,7 @@ export default new Config().merge({
     bundle: ['babel-polyfill', './src/index.tsx']
   },
   output: {
-    path: path.resolve(__dirname, '../dist'),
+    path: path.resolve(__dirname, '../dist/public'),
     publicPath: '/',
     filename: '[name].js'
   },
@@ -39,7 +39,7 @@ export default new Config().merge({
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2)$/,
-        loader: 'file?name=public/fonts/[name].[ext]'
+        loader: 'file?name=fonts/[name].[ext]'
       }
     ]
   },

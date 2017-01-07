@@ -5,7 +5,8 @@
   "homepage": "http://muuki88.github.io/daylight",
   "scripts": {
     "start": "NODE_ENV=dev webpack-dev-server",
-    "prod": "NODE_ENV=prod webpack -p",
+    "prod-client": "NODE_ENV=prod webpack -p",
+    "prod-server": "NODE_ENV=server webpack -p",
     "deploy": "git checkout -B gh-pages && git add -f build && git commit -am \"chore: deploy\" && git filter-branch -f --prune-empty --subdirectory-filter build && git push -f origin gh-pages && git checkout master"
   },
   "dependencies": {
