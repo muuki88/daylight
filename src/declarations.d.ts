@@ -6,3 +6,14 @@ declare var require: {
     (paths: string[], callback: (...modules: any[]) => void): void;
     ensure: (paths: string[], callback: (require: <T>(path: string) => T) => void) => void;
 };
+
+// https://github.com/api-ai/api-ai-javascript/blob/v2/declarations.d.ts
+interface Navigator {
+    Resampler: any
+}
+interface AudioContext {
+    createResampleProcessor: Function
+}
+interface Window {
+    speechSynthesis: any
+}

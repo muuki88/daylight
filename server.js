@@ -21,8 +21,9 @@ io.sockets.on('connection', (socket) => {
   socket.on('message', (data) => {
 
     if (data === 'wakeup') {
-      console.log('wakeup client');
       io.sockets.emit('wakeup', {hotword: null})
+    } else if (data === 'reload' || data === 'refresh') {
+      io.sockets.emit('reload', {})
     } else {
       // socket.emit('message', `received: ${data}`)
       io.sockets.emit('text', data);
