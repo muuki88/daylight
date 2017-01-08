@@ -24,7 +24,8 @@ enum StreamClientState {
   INITIALIZED,
   OPEN,
   LISTENING,
-  CLOSED
+  CLOSED,
+  ERROR
 }
 
 interface IAppState {
@@ -99,7 +100,8 @@ class App extends React.Component<IAppProps, IAppState> {
       onStopListening: () => this.setState({streamClientState: StreamClientState.OPEN}),
       // TODO display some error messages
       onError: (error, message) => {
-        console.log('onError', error, message)
+        console.log('onError', error, message);
+        this.setState({streamClientState: StreamClientState.ERROR})
       }
       // for debugging
       // onEvent: (id, message) => {
@@ -229,6 +231,9 @@ class App extends React.Component<IAppProps, IAppState> {
   render() {
     return (
       <div className={styles.App}>
+          <div className={styles.streamClientState}>
+            {StreamClientState[this.state.streamClientState]}
+          </div>
           <div className={styles.status}>
             {this.isRecording() && <div className={styles.isRecording}></div>}
           </div>

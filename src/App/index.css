@@ -59,3 +59,11 @@
   width: 40px;
   @mixin animation breathing, 3s, linear, infinite;
 }
+
+.streamClientState {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 20px;
+  padding: 40px;
+}
