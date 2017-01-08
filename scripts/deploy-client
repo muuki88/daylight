@@ -15,5 +15,5 @@ echo "-------- MANUAL PART --------"
 echo
 
 echo "execute these commands"
-echo "> iocat --socketio ws://localhost:3050"
+echo "> iocat --socketio ws://$HOSTNAME:3050"
 echo "> reload"
