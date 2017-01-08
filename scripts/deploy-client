@@ -1,0 +1,19 @@
+#! /usr/bin/env bash
+rm -rf dist
+yarn run prod
+
+# hostname for ssh and scp
+HOSTNAME="mirror"
+DESTINATION_DIR="/opt/daylight/source/dist"
+
+# clean up old directory and upload new assets
+ssh $HOSTNAME "rm -rf $DESTINATION_DIR"
+scp -r dist $HOSTNAME:$DESTINATION_DIR
+
+echo
+echo "-------- MANUAL PART --------"
+echo
+
+echo "execute these commands"
+echo "> iocat --socketio ws://localhost:3050"
+echo "> reload"
