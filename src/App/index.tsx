@@ -208,7 +208,7 @@ class App extends React.Component<IAppProps, IAppState> {
     window.location.reload();
   }
 
-  updateState = (apiAiResponse: IServerResponse) => {
+  updateState: (IServerResponse) => IAction = (apiAiResponse: IServerResponse) => {
     const action = apiAiResponse.status.code === 200 ? apiAiResponse.result : {
       action: 'unkown.input',
       fulfillment: {
@@ -220,6 +220,7 @@ class App extends React.Component<IAppProps, IAppState> {
       streamClientState: this.state.streamClientState,
       action: (action as IAction)
     });
+    return action as IAction;
   }
 
   queryParams(): IQueryParams {

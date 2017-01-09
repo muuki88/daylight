@@ -9,7 +9,6 @@
     "deploy": "git checkout -B gh-pages && git add -f build && git commit -am \"chore: deploy\" && git filter-branch -f --prune-empty --subdirectory-filter build && git push -f origin gh-pages && git checkout master"
   },
   "dependencies": {
-    "@types/es6-promise": "^0.0.32",
     "@types/isomorphic-fetch": "^0.0.31",
     "@types/moment": "^2.13.0",
     "@types/react-dom": "^0.14.20",

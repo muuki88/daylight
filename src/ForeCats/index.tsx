@@ -48,7 +48,7 @@ class ForeCats extends React.Component<IForeCatsProps, {imageUrl?: string}> {
     return response.json().then(json => json as IImgurGalleryResponse);
   }
 
-  updateState = (images: IImgurGalleryResponse) => {
+  updateState: (IServerResponse) => void = (images: IImgurGalleryResponse) => {
     const randomIndex = Math.floor(Math.random() * images.data.length);
     this.setState({
       imageUrl: images.data[randomIndex].link
