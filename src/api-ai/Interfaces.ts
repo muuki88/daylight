@@ -22,6 +22,7 @@ export interface IAction {
   resolvedQuery: string,
   actionIncomplete: boolean,
   contexts: Array<IContext>,
+  speech?: string,
   fulfillment?: {
       speech: string
   }

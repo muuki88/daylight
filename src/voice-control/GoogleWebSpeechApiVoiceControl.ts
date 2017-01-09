@@ -20,13 +20,7 @@ export default class GoogleWebSpeechApiVoiceControl implements IVoiceControl {
   constructor(config: IVoiceControlConfig) {
     this.recognition = new webkitSpeechRecognition();
     this.recognition.lang = 'de-DE';
-    this.recognition.onstart = this.onRecognitionStart;
-    this.recognition.onend = this.onRecognitionEnd;
     this.recognition.onresult = this.onRecognitionResult;
-
-    if (this.config.onError) {
-      this.recognition.onerror = this.config.onError;
-    }
 
     this.config = config;
   }
@@ -38,6 +32,7 @@ export default class GoogleWebSpeechApiVoiceControl implements IVoiceControl {
           this.currentReject = reject;
       });
       this.currentRequest = request;
+      this.recognition.start();
       return request;
     }
     // TODO introduce error type
@@ -53,18 +48,6 @@ export default class GoogleWebSpeechApiVoiceControl implements IVoiceControl {
   }
 
   private isReady = () => !this.currentRequest;
-
-  private onRecognitionStart = () => {
-    if (this.config.onStartListening) {
-      this.config.onStartListening();
-    }
-  }
-
-  private onRecognitionEnd = () => {
-    if (this.config.onStopListening) {
-      this.config.onStopListening();
-    }
-  }
 
   private onRecognitionResult = (event: SpeechRecognitionEvent) => {
     let text = '';

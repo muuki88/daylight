@@ -19,10 +19,5 @@ export interface IVoiceControl {
 }
 
 export interface IVoiceControlConfig {
-  readonly accessToken: string,
-  onResults(response: IServerResponse): void,
-  onInit?(): void,
-  onStartListening?(): void,
-  onStopListening?(): void,
-  onError?(error: any): void
+  readonly accessToken: string
 }

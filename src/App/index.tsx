@@ -7,6 +7,10 @@ import {Client} from '../api-ai/Client';
 import ApiAiConstants from '../api-ai/Constants';
 import StreamClient from '../api-ai/Stream/StreamClient';
 
+import {IVoiceControl} from '../voice-control/IVoiceControl';
+import GoogleWebSpeechApiVoiceControl from '../voice-control/GoogleWebSpeechApiVoiceControl';
+import ApiAiVoiceControl from '../voice-control/ApiAiVoiceControl';
+
 import DateTime from '../DateTime';
 import ForeCats from '../ForeCats';
 import UnkownInput from '../UnkownInput';
@@ -16,21 +20,11 @@ import {IServerResponse, IAction, IContext} from '../api-ai/Interfaces';
 
 const styles = require<any>('./index.css');
 
-const ONE_MINUTE = 1000 * 60;
-const ONE_HOUR = 60 * ONE_MINUTE;
-
-enum StreamClientState {
-  CREATED,
-  INITIALIZED,
-  OPEN,
-  LISTENING,
-  CLOSED,
-  ERROR
-}
 
 interface IAppState {
-  streamClientState: StreamClientState,
-  action?: IAction
+  isRecording: boolean,
+  action?: IAction,
+  error?: {}
 }
 
 interface IQueryParams {
@@ -44,40 +38,20 @@ interface IAppProps extends ReactRouter.RouteComponentProps<{}, {}> {
 class App extends React.Component<IAppProps, IAppState> {
 
   readonly socket: SocketIOClient.Socket;
-  readonly streamClient: StreamClient;
-
+  readonly voiceControl: IVoiceControl;
 
   constructor(props) {
     super(props);
     this.socket = io.connect('localhost:3050');
 
-    // socket-io client
-    const client = new Client({
-      accessToken: this.queryParams().API_AI_ACCESSTOKEN,
-      lang: ApiAiConstants.AVAILABLE_LANGUAGES.DE
-    });
-    this.streamClient = client.createStreamClient({
-      onInit: () => this.setState({streamClientState: StreamClientState.INITIALIZED}),
-      onResults: this.onRecognitionResult,
-      onOpen: (id, message) => {
-        this.setState({streamClientState: StreamClientState.OPEN});
-        this.startRecognition();
-      },
-      onClose: () => this.setState({streamClientState: StreamClientState.CLOSED}),
-      onStartListening: () => this.setState({streamClientState: StreamClientState.LISTENING}),
-      onStopListening: () => this.setState({streamClientState: StreamClientState.OPEN}),
-      // TODO display some error messages
-      onError: (error, message) => {
-        console.log('onError', error, message);
-        this.setState({streamClientState: StreamClientState.ERROR})
-      }
-      // for debugging
-      // onEvent: (id, message) => {
-      //   console.log('event', id, message)
-      // }
-    });
-
-    this.streamClient.init();
+    // voice control setup
+    const voiceControlConfig = {
+      accessToken: this.queryParams().API_AI_ACCESSTOKEN
+    };
+    // TODO make this configurable
+    // this.voiceControl = new GoogleWebSpeechApiVoiceControl(voiceControlConfig);
+    this.voiceControl = new ApiAiVoiceControl(voiceControlConfig);
+    //
 
     this.socket.on('connect', () => {
       console.log(`connected to backend ${this.socket.id}`);
@@ -89,54 +63,27 @@ class App extends React.Component<IAppProps, IAppState> {
     this.socket.on('text', this.getAction);
 
     this.state = {
-      streamClientState: StreamClientState.CREATED
+      isRecording: false
     };
   }
 
   componentWillUnmount() {
     this.socket.close();
     // stop listening
+    this.voiceControl.close();
   }
 
   onRefresh = () => window.location.reload()
 
   onWakeWord = () => {
-    if (this.state.streamClientState === StreamClientState.OPEN) {
-      this.startRecognition();
-    } else if (
-      this.state.streamClientState === StreamClientState.CLOSED ||
-      this.state.streamClientState === StreamClientState.INITIALIZED ) {
-      // open will trigger listening afterwards
-      this.streamClient.open();
-    }
+    this.setState({isRecording: true});
+    this.voiceControl.startRecognition()
+      .then(this.updateState)
+      .catch(this.updateErrorState);
+
   }
 
-  startRecognition = () => {
-    this.streamClient.startListening();
-    this.setState({
-      streamClientState: StreamClientState.LISTENING
-    });
-    // listen 5 seconds
-    // http://stackoverflow.com/questions/24515978/html-audio-recording-until-silence
-    setTimeout(this.stopRecognition, 4000);
-  }
-
-  stopRecognition = () => {
-    // Google's Speech API automatically detects the end of the sentences and stops
-    // For api.ai we must do this manually
-    this.streamClient.stopListening();
-    this.setState({
-      streamClientState: StreamClientState.OPEN
-    });
-  }
-
-  onRecognitionResult = (apiAiResponse: IServerResponse) => {
-    this.setState({
-      streamClientState: this.state.streamClientState,
-      action: apiAiResponse.result
-    });
-  }
-
+  // TODO use the client for this
   getAction = (text: string) => {
     const accessToken = this.queryParams().API_AI_ACCESSTOKEN;
     fetch('https://api.api.ai/v1/query?v=20150910', {
@@ -151,8 +98,6 @@ class App extends React.Component<IAppProps, IAppState> {
       body: JSON.stringify({ query: text, lang: 'de', sessionId: 'wally-mirror' })
     }).then(this.parseApiAiResponse)
       .then(this.updateState)
-      // Only for API AI client
-      // .then(this.onRecognitionEnd)
       .catch(error => {
         console.log(error);
     });
@@ -170,35 +115,36 @@ class App extends React.Component<IAppProps, IAppState> {
   updateState: (IServerResponse) => IAction = (apiAiResponse: IServerResponse) => {
     const action = apiAiResponse.status.code === 200 ? apiAiResponse.result : {
       action: 'unkown.input',
-      fulfillment: {
-        speech: 'Das war absolut unverständlich :('
-      }
+      speech: 'Das war absolut unverständlich :('
     }
 
     this.setState({
-      streamClientState: this.state.streamClientState,
+      isRecording: false,
       action: (action as IAction)
     });
     return action as IAction;
+  }
+
+  updateErrorState = (error: any) => {
+    this.setState({
+      isRecording: this.state.isRecording,
+      error: error
+    });
   }
 
   queryParams(): IQueryParams {
     return this.props.location.query as IQueryParams;
   }
 
-  isRecording = () => this.state.streamClientState === StreamClientState.LISTENING;
-
   render() {
+    const isRecording = this.state.isRecording;
     return (
       <div className={styles.App}>
-          <div className={styles.streamClientState}>
-            {StreamClientState[this.state.streamClientState]}
-          </div>
           <div className={styles.status}>
-            {this.isRecording() && <div className={styles.isRecording}></div>}
+            {isRecording && <div className={styles.isRecording}></div>}
           </div>
           <div className={styles.container}>
-            {this.isRecording() ? <Recording /> : (
+            {isRecording ? <Recording /> : (
               this.state.action ? this.renderAction(this.state.action) : <DateTime />
             )}
           </div>
@@ -212,7 +158,11 @@ class App extends React.Component<IAppProps, IAppState> {
       case 'clock.show': return <DateTime />;
       case 'cats.show': return <ForeCats clientId={imgurClientId} />;
       case 'input.unknown':
-      default: return <UnkownInput speech={action.fulfillment.speech} />
+      default:
+        const speech = this.state.error ?
+          JSON.stringify(this.state.error) :
+          (action.speech || action.fulfillment.speech);
+        return <UnkownInput speech={speech} />
     }
   }
 }
