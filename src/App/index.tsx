@@ -12,7 +12,7 @@ import ForeCats from '../ForeCats';
 import UnkownInput from '../UnkownInput';
 import Recording from './Recording';
 
-import {IServerResponse, IAction, IContext} from '../models/api-ai';
+import {IServerResponse, IAction, IContext} from '../api-ai/Interfaces';
 
 const styles = require<any>('./index.css');
 
