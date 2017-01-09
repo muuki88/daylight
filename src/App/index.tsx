@@ -12,7 +12,7 @@ import GoogleWebSpeechApiVoiceControl from '../voice-control/GoogleWebSpeechApiV
 import ApiAiVoiceControl from '../voice-control/ApiAiVoiceControl';
 
 import DateTime from '../DateTime';
-import ForeCats from '../ForeCats';
+import Cats from '../Cats';
 import UnkownInput from '../UnkownInput';
 import Recording from './Recording';
 
@@ -156,7 +156,7 @@ class App extends React.Component<IAppProps, IAppState> {
     const imgurClientId = this.queryParams().IMGUR_CLIENTID;
     switch (action.action) {
       case 'clock.show': return <DateTime />;
-      case 'cats.show': return <ForeCats clientId={imgurClientId} />;
+      case 'cats.show': return <Cats clientId={imgurClientId} />;
       case 'input.unknown':
       default:
         const speech = this.state.error ?
