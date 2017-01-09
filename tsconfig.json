@@ -9,10 +9,9 @@
     "include": [
         "./src/**/*"
     ],
-    "filesGlob": [
-      "**/*.ts",
-      "**/*.tsx",
-      "!node_modules/**"
+    "exclude": [
+      "node_modules",
+      "!node_modules/@types"
     ],
     "compileOnSave": false
 }
