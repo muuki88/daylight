@@ -47,38 +47,6 @@ class App extends React.Component<IAppProps, IAppState> {
   readonly streamClient: StreamClient;
 
 
-  /* === Web Speech API ===  */
-  /*
-   * @see https://www.chromium.org/developers/how-tos/api-keys
-   * @see https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API
-   * @see https://groups.google.com/a/chromium.org/forum/#!topic/chromium-dev/5PrGai_wOZU
-   */
-  /*
-   * readonly recognition: SpeechRecognition;
-   *
-   * constructor() {
-   *  super();
-   *  this.recognition = new webkitSpeechRecognition();
-   *  this.recognition.lang = 'de-DE';
-   *  this.recognition.onstart = this.onRecognitionStart;
-   *  this.recognition.onend = this.onRecognitionEnd;
-   *  this.recognition.onresult = this.onRecognitionResult;
-   * }
-   *
-   *  onWakeWord = () => this.recognition.start();
-
-   *  onRecognitionResult = (event) => {
-   *    let text = '';
-   *    for (let i = event.resultIndex; i < event.results.length; ++i) {
-   *      text += event.results[i][0].transcript;
-   *    }
-   *    this.getAction(text);
-   *  }
-   *  componentWillUnmount() {
-   *    this.recognition.stop();
-   *  }
-   */
-
   constructor(props) {
     super(props);
     this.socket = io.connect('localhost:3050');
@@ -169,15 +137,6 @@ class App extends React.Component<IAppProps, IAppState> {
     });
   }
 
-  // google web speech api
-  onRecognitionResultSpeechApi = (event) => {
-    let text = '';
-    for (let i = event.resultIndex; i < event.results.length; ++i) {
-      text += event.results[i][0].transcript;
-    }
-    this.getAction(text);
-  }
-
   getAction = (text: string) => {
     const accessToken = this.queryParams().API_AI_ACCESSTOKEN;
     fetch('https://api.api.ai/v1/query?v=20150910', {
@@ -202,7 +161,7 @@ class App extends React.Component<IAppProps, IAppState> {
   parseApiAiResponse = (response: IResponse) => {
     return response.json().then(json => json as IServerResponse);
   }
-  // ---------
+
 
   refreshSite = () => {
     window.location.reload();
