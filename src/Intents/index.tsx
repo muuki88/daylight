@@ -37,11 +37,9 @@ class Intents extends React.Component<IIntentsProps, {intents: IIntents}> {
 
   render() {
     const lang = this.props.lang;
-    console.log(this.state.intents);
-    console.log(lang);
     return <div className={styles.Intents}>
       <ul>
-        {this.state.intents[lang].map(intent => <li className={styles.Intents_List}>
+        {this.state.intents[lang].map(intent => <li key={intent.name} className={styles.Intents_List}>
             <strong>{intent.name}</strong> : <small>{intent.description}</small>
           </li>)}
       </ul>
