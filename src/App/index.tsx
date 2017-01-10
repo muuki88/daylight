@@ -29,7 +29,8 @@ interface IAppState {
 
 interface IQueryParams {
   API_AI_ACCESSTOKEN: string,
-  IMGUR_CLIENTID: string
+  IMGUR_CLIENTID: string,
+  LANG: string // de and en supported
 }
 
 interface IAppProps extends ReactRouter.RouteComponentProps<{}, {}> {

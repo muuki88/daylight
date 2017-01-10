@@ -19,5 +19,6 @@ export interface IVoiceControl {
 }
 
 export interface IVoiceControlConfig {
-  readonly accessToken: string
+  readonly accessToken: string,
+  readonly lang?: string
 }

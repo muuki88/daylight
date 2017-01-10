@@ -19,7 +19,7 @@ export default class GoogleWebSpeechApiVoiceControl implements IVoiceControl {
 
   constructor(config: IVoiceControlConfig) {
     this.recognition = new webkitSpeechRecognition();
-    this.recognition.lang = 'de-DE';
+    this.recognition.lang = this.parseLang(config.lang);
     this.recognition.onresult = this.onRecognitionResult;
 
     this.config = config;
@@ -45,6 +45,20 @@ export default class GoogleWebSpeechApiVoiceControl implements IVoiceControl {
       this.currentReject();
     }
     this.reset();
+  }
+
+  private parseLang = (lang: String) => {
+    switch (lang) {
+      case 'de':
+      case 'DE':
+      case null:
+      case undefined:
+        return 'de-DE';
+      case 'en':
+      case 'EN':
+        return 'en-EN';
+      default: throw new Error(`Invalid language ${lang}. Use 'de' or 'en'`);
+    }
   }
 
   private isReady = () => !this.currentRequest;

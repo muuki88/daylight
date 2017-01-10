@@ -24,7 +24,7 @@ export default class ApiAiVoiceControl implements IVoiceControl {
   constructor(config: IVoiceControlConfig) {
     const client = new Client({
       accessToken: config.accessToken,
-      lang: ApiAiConstants.AVAILABLE_LANGUAGES.DE
+      lang: this.parseLang(config.lang)
     });
     this.streamClient = client.createStreamClient({
       onResults: this.onRecognitionResult,
@@ -62,6 +62,20 @@ export default class ApiAiVoiceControl implements IVoiceControl {
   close(): void {
     this.streamClient.stopListening();
     this.streamClient.close();
+  }
+
+  private parseLang = (lang: String) => {
+    switch (lang) {
+      case 'de':
+      case 'DE':
+      case null:
+      case undefined:
+        return ApiAiConstants.AVAILABLE_LANGUAGES.DE;
+      case 'en':
+      case 'EN':
+        return ApiAiConstants.AVAILABLE_LANGUAGES.EN;
+      default: throw new Error(`Invalid language ${lang}. Use 'de' or 'en'`);
+    }
   }
 
   private isReady = () => !this.currentRequest && this.state !== StreamClientState.LISTENING;
