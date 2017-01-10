@@ -47,7 +47,8 @@ class App extends React.Component<IAppProps, IAppState> {
 
     // voice control setup
     const voiceControlConfig = {
-      accessToken: this.queryParams().API_AI_ACCESSTOKEN
+      accessToken: this.queryParams().API_AI_ACCESSTOKEN,
+      lang: this.queryParams().LANG
     };
     // TODO make this configurable
     // this.voiceControl = new GoogleWebSpeechApiVoiceControl(voiceControlConfig);
