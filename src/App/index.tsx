@@ -14,6 +14,7 @@ import ApiAiVoiceControl from '../voice-control/ApiAiVoiceControl';
 import DateTime from '../DateTime';
 import Cats from '../Cats';
 import UnkownInput from '../UnkownInput';
+import Intents from '../Intents';
 import Recording from './Recording';
 
 import {IServerResponse, IAction, IContext} from '../api-ai/Interfaces';
@@ -155,10 +156,12 @@ class App extends React.Component<IAppProps, IAppState> {
   }
 
   renderAction = (action: IAction) => {
-    const imgurClientId = this.queryParams().IMGUR_CLIENTID;
+    const params = this.queryParams();
+    const imgurClientId = params.IMGUR_CLIENTID;
     switch (action.action) {
       case 'clock.show': return <DateTime />;
       case 'cats.show': return <Cats clientId={imgurClientId} />;
+      case 'mirror.intents': return <Intents lang={params.LANG}/>
       case 'input.unknown':
       default:
         const speech = this.state.error ?
