@@ -114,6 +114,7 @@ export default class ApiAiVoiceControl implements IVoiceControl {
       this.currentResolve(apiAiResponse);
     }
     this.reset();
+    this.setState(StreamClientState.OPEN);
   }
 
   private onStopListening = () => {
@@ -128,6 +129,7 @@ export default class ApiAiVoiceControl implements IVoiceControl {
       this.currentReject({id: error, message: message})
     }
     this.reset();
+    this.setState(StreamClientState.OPEN);
   }
 
   private reset = () => {

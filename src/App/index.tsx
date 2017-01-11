@@ -130,7 +130,7 @@ class App extends React.Component<IAppProps, IAppState> {
 
   updateErrorState = (error: any) => {
     this.setState({
-      isRecording: this.state.isRecording,
+      isRecording: false,
       error: error
     });
   }
