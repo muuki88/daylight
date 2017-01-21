@@ -1,7 +1,9 @@
 [Unit]
 Description=Node.js Mirror Server
+Requires=network.target
 
 [Service]
+Type=simple
 ExecStart=/usr/local/bin/node /opt/daylight/server.js
 Restart=always
 RestartSec=10                       # Restart service after 10 seconds if node service crashes
