@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as fetch from 'isomorphic-fetch';
 
 import Imgur, {IImgurImage} from '../apis/Imgur';
 import Giphy, {IGiphyRandomImage, IGiphySearchImage} from '../apis/Giphy';

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as io from 'socket.io-client';
 
+// https://coolors.co/8aea92-80ada0-5f5566-33202a-000000
 const styles = require<any>('./index.css');
 
 interface IControlState {
