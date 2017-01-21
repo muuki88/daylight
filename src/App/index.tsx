@@ -84,7 +84,7 @@ class App extends React.Component<IAppProps, IAppState> {
       .then(this.updateState)
       .catch(this.updateErrorState);
 
-  }
+  };
 
   // TODO use the client for this
   getAction = (text: string) => {
@@ -104,36 +104,36 @@ class App extends React.Component<IAppProps, IAppState> {
       .catch(error => {
         console.log(error);
     });
-  }
+  };
 
   parseApiAiResponse = (response: IResponse) => {
     return response.json().then(json => json as IServerResponse);
-  }
+  };
 
 
   refreshSite = () => {
     window.location.reload();
-  }
+  };
 
   updateState: (IServerResponse) => IAction = (apiAiResponse: IServerResponse) => {
     const action = apiAiResponse.status.code === 200 ? apiAiResponse.result : {
       action: 'unkown.input',
       speech: 'Das war absolut unverständlich :('
-    }
+    };
 
     this.setState({
       isRecording: false,
       action: (action as IAction)
     });
     return action as IAction;
-  }
+  };
 
   updateErrorState = (error: any) => {
     this.setState({
       isRecording: false,
       error: error
     });
-  }
+  };
 
   queryParams(): IQueryParams {
     return this.props.location.query as IQueryParams;
