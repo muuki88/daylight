@@ -21,11 +21,11 @@ export default new Config().merge({
         loader: 'awesome-typescript-loader'
       },
       {
-        test: /.jsx?$/,
+        test: /.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
         query: {
-          presets: ['es2015', 'react', 'stage-1']
+          presets: ['es2015']
         }
       },
       {
