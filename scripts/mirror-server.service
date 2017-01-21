@@ -1,0 +1,17 @@
+[Unit]
+Description=Node.js Mirror Server
+
+[Service]
+ExecStart=/usr/local/bin/node /opt/daylight/server.js
+Restart=always
+RestartSec=10                       # Restart service after 10 seconds if node service crashes
+StandardOutput=syslog               # Output to syslog
+StandardError=syslog                # Output to syslog
+SyslogIdentifier=nodejs-mirror-service
+User=pi
+Group=pi
+WorkingDirectory=/opt/daylight
+Environment=NODE_ENV=production PORT=3050
+
+[Install]
+WantedBy=multi-user.target
