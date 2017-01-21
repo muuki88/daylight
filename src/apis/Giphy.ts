@@ -7,6 +7,9 @@ import * as fetch from 'isomorphic-fetch';
 export interface IGiphyRandomImage {
   type: string,
   id: string,
+  image_original_url: string,
+  image_width: number,
+  image_height: number,
   // fixed height downsampled
   fixed_height_downsampled_url: string,
   fixed_height_downsampled_width: number,
@@ -35,6 +38,8 @@ export interface IGiphySearchImage {
   id: string,
   type: string,
   images: {
+    original: IGiphySearchImageMeta,
+    fixed_height: IGiphySearchImageMeta,
     fixed_height_downsampled: IGiphySearchImageMeta
   }
 }
@@ -64,7 +69,7 @@ export default class Giphy {
     })
     .then(response => response.json<IGiphyRandomImageResponse>())
     .then(image => image.data);
-  }
+  };
 
   public searchImage: (string) => Promise<IGiphySearchImage> = (query: string) => {
     const limit = 10;
@@ -77,7 +82,7 @@ export default class Giphy {
     })
     .then(response => response.json<IGiphySearchResponse>())
     .then(this.extractImage);
-  }
+  };
 
   private extractImage(response: IGiphySearchResponse): IGiphySearchImage {
     const data = response.data;

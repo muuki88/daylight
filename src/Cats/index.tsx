@@ -38,21 +38,21 @@ class Cats extends React.Component<ICatsProps, ICatsState> {
       .then(this.parseImgurApiResponse)
       .then(this.updateState)
       .catch(this.onError);
-  }
+  };
 
   fetchFromGiphyRandom = (tag: string) => {
     this.giphy.searchRandomImage(tag)
       .then(this.parseGiphyRandomApiResponse)
       .then(this.updateState)
       .catch(this.onError);
-  }
+  };
 
   fetchFromGiphySearch = () => {
     this.giphy.searchImage('cats funny')
       .then(this.parseGiphySearchApiResponse)
       .then(this.updateState)
       .catch(this.onError);
-  }
+  };
 
   parseImgurApiResponse(image: IImgurImage): ICatsState {
     return {
@@ -71,16 +71,16 @@ class Cats extends React.Component<ICatsProps, ICatsState> {
       imageWidth: downsampledImage.width,
       imageType: image.type
     }
-  }
+  };
 
   parseGiphyRandomApiResponse = (image: IGiphyRandomImage) => {
     return {
-      imageUrl: image.fixed_height_downsampled_url,
-      imageHeight: image.fixed_height_downsampled_height,
-      imageWidth: image.fixed_height_downsampled_width,
+      imageUrl: image.image_original_url,
+      imageHeight: image.image_height,
+      imageWidth: image.image_width,
       imageType: image.type
     };
-  }
+  };
 
   updateState = (newState: ICatsState) => this.setState(newState);
 
@@ -92,7 +92,7 @@ class Cats extends React.Component<ICatsProps, ICatsState> {
       imageHeight: 200,
       imageType: 'gif'
     });
-  }
+  };
 
   render() {
     console.log(this.state)
