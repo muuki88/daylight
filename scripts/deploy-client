@@ -4,7 +4,7 @@ yarn run prod
 
 # hostname for ssh and scp
 HOSTNAME="mirror"
-DESTINATION_DIR="/opt/daylight/source/dist"
+DESTINATION_DIR="/opt/daylight/dist"
 
 # clean up old directory and upload new assets
 ssh $HOSTNAME "rm -rf $DESTINATION_DIR"

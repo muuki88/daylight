@@ -1,0 +1,100 @@
+#! /usr/bin/env bash
+
+# snowboy
+echo "installing audio packages for wake word detection"
+sudo apt-get install python-pyaudio python3-pyaudio sox
+
+echo "list playback devices"
+aplay -l
+echo "show recording devices"
+arecord -l
+
+echo "backup ~./asoundrc to ~./asoundrc.bak"
+mv ~/.asoundrc ~/.asoundrc.bak
+
+echo "writing ~./asoundrc file"
+audioconfig="pcm.!default {
+  type asym
+   playback.pcm {
+     type plug
+     slave.pcm \"hw:0,0\"
+   }
+   capture.pcm {
+     type plug
+     slave.pcm \"hw:1,0\"
+   }
+}
+"
+echo "$audioconfig" > ~/.asoundrc
+
+# install node
+# https://blog.wia.io/installing-node-js-v4-0-0-on-a-raspberry-pi
+if ! type "node" > /dev/null; then
+  echo "installing nodejs"
+  read -p $'\e[33m node version (x.y.z)? \e[39m' NODE_VERSION
+  ARM_VERSION=$(uname -a | cut -d ' ' -f12)
+
+  path=node-v$NODE_VERSION-linux-$ARM_VERSION
+  file=$path.tar.xz
+  wget https://nodejs.org/dist/v$NODE_VERSION/$file
+  tar -xvf $file
+  cd $path
+  sudo cp -R * /usr/local/
+  cd ..
+  rm -f $file
+  rm -rf $path
+fi
+
+# install yarn
+if ! type "yarn" > /dev/null; then
+  echo "Installing yarn"
+  wget https://yarnpkg.com/latest.tar.gz
+  tar zvxf latest.tar.gz
+  cd dist
+  sudo mkdir /opt/yarn
+  sudo cp -R * /opt/yarn
+
+  # link
+  sudo bash -c "echo 'export PATH=\"\$PATH:/opt/yarn/bin\"' >> /etc/profile"
+
+  # cleanup
+  rm latest.tar.gz
+  # sudo npm install pm2 -g --unsafe-perm
+fi
+
+# install kiosk mode
+echo "installing kiosk"
+cd /opt
+sudo mkdir daylight-kiosk
+sudo chown -R pi:pi daylight-kiosk
+git clone https://github.com/muuki88/daylight-kiosk.git
+cd daylight-kiosk
+chmod u+x install.sh
+./install.sh
+
+# wally installation
+echo "installing wally"
+cd /opt
+sudo mkdir daylight
+sudo chown -R pi:pi daylight
+git clone https://github.com/muuki88/daylight.git
+cd daylight
+
+# TODO bundle frontend with webpack
+yarn install --production
+
+# TODO provide a systemd start script instead of that pm2 stuff
+
+# install pm2 nodejs process manager
+# https://github.com/Unitech/pm2
+# if ! type "pm2" > /dev/null; then
+  # echo "Installing pm2"
+  # sudo yarn global add pm2 --prefix /usr/local
+# fi
+
+# startOrRestart?
+# pm2 start server.js --name="mirror"
+
+# save process list
+# pm2 save
+# pm2 startup
